@@ -1,0 +1,14 @@
+{
+  "name": "cityjan",
+  "version": "1.0.0",
+  "description": "Hackathon project for civic issues",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.20.0",
+    "multer": "^2.0.2"
+  }
+}

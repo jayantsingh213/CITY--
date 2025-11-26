@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | CITYजन</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* --- THEME COLORS --- */
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #FAC9B8;
+            --footer-bg: #2F243A; 
+            --white: #ffffff;
+            --light-bg: #f4f6f8;
+            --green: #28a745;
+            --yellow: #ffc107;
+            --blue: #17a2b8;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- Header --- */
+        header { 
+            background: var(--white); 
+            padding: 15px 0; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+        }
+        
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            color: var(--primary-color); 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        
+        .admin-badge { 
+            background: var(--footer-bg); 
+            color: white; 
+            font-size: 0.7rem; 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            text-transform: uppercase; 
+            font-weight: normal; 
+        }
+        
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        
+        .nav-info {
+            color: #000000;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .btn-logout { 
+            color: #000000;
+            text-decoration: none; 
+            font-size: 1.05rem; 
+            font-weight: 700;
+            transition: 0.3s; 
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-logout:hover { color: red; }
+
+        /* --- Dashboard Stats --- */
+        .dashboard-title { margin: 30px 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .dashboard-title h2 { color: var(--footer-bg); margin: 0; }
+        .date-display { color: #666; font-size: 0.9rem; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: var(--white); padding: 20px; border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px;
+            border-bottom: 4px solid transparent;
+        }
+        .stat-icon { font-size: 2rem; opacity: 0.2; }
+        .stat-info h3 { margin: 0; font-size: 1.8rem; }
+        .stat-info p { margin: 0; color: #666; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- Management Table --- */
+        .table-container {
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            padding: 20px;
+        }
+        .table-header { margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { text-align: left; padding: 15px; background: #f8f9fa; color: #555; font-weight: 600; border-bottom: 2px solid #eee; }
+        td { padding: 15px; border-bottom: 1px solid #eee; color: #444; vertical-align: middle; }
+        tr:hover { background-color: #f9f9f9; }
+
+        /* Status Badges */
+        .badge { padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; display: inline-block; }
+        .badge-pending { background: #fff3cd; color: #856404; }
+        .badge-progress { background: #e2e6ea; color: #333; }
+        .badge-resolved { background: #d4edda; color: #155724; }
+
+        /* Buttons */
+        .btn-update {
+            background: var(--primary-color); color: white; border: none; padding: 6px 12px;
+            border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: 0.3s;
+        }
+        .btn-update:hover { background: var(--footer-bg); }
+
+        .btn-photo { 
+            background: var(--blue); color: white; text-decoration: none; 
+            padding: 6px 12px; border-radius: 4px; font-size: 0.85rem; display: inline-block;
+            border: none; /* Added for button compatibility */
+            cursor: pointer; /* Added for button compatibility */
+        }
+        .btn-photo:hover { opacity: 0.9; }
+        .no-photo { color: #999; font-style: italic; font-size: 0.85rem; }
+
+        /* Footer */
+        footer { margin-top: 50px; padding: 20px 0; background: var(--footer-bg); color: white; text-align: center; font-size: 0.9rem; }
+
+        /* --- MODAL CSS (Added) --- */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 1000; 
+            padding-top: 50px; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.85); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            max-height: 80vh; /* Keeps it within viewport */
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+            animation: zoom 0.3s;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+
+        .close-btn:hover { color: #bbb; }
+
+        @keyframes zoom {
+            from {transform:scale(0)} 
+            to {transform:scale(1)}
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-shield-halved"></i> CITYजन <span class="admin-badge">Admin</span>
+                </a>
+                <div class="nav-links">
+                    <span class="nav-info"><i class="fa-regular fa-user"></i> Officer Sharma (LKO-01)</span>
+                    <a href="index.html" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <div class="dashboard-title">
+            <h2>Complaint Overview</h2>
+            <span class="date-display">Last Updated: Just Now</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card" style="border-color: var(--blue);">
+                <i class="fa-solid fa-layer-group stat-icon" style="color: var(--blue);"></i>
+                <div class="stat-info">
+                    <h3>12</h3>
+                    <p>Total Complaints</p>
+                </div>
+            </div>
+            <div class="stat-card" style="border-color: var(--yellow);">
+                <i class="fa-solid fa-clock stat-icon" style="color: var(--yellow);"></i>
+                <div class="stat-info">
+                    <h3>5</h3>
+                    <p>Pending Action</p>
+                </div>
+            </div>
+            <div class="stat-card" style="border-color: orange;">
+                <i class="fa-solid fa-person-digging stat-icon" style="color: orange;"></i>
+                <div class="stat-info">
+                    <h3>2</h3>
+                    <p>Teams Deployed</p>
+                </div>
+            </div>
+            <div class="stat-card" style="border-color: var(--green);">
+                <i class="fa-solid fa-check-circle stat-icon" style="color: var(--green);"></i>
+                <div class="stat-info">
+                    <h3>5</h3>
+                    <p>Resolved</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h3>Recent Reports Queue</h3>
+                <button class="btn-update" onclick="window.location.reload()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Issue Type</th>
+                        <th>Location</th>
+                        <th>Photo</th> <th>Date</th>
+                        <th>Current Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="complaint-table">
+                    <tr><td colspan="7" style="text-align:center;">Loading data from database...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <div id="imagePreviewModal" class="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="previewImg">
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CITYजन Admin Panel | Authorized Personnel Only</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- LOAD REAL DATA FROM MONGODB ---
+        window.onload = async function() {
+            try {
+                // 1. Fetch reports from the Server
+                const response = await fetch('/api/reports'); 
+                
+                if(!response.ok) throw new Error("Failed to fetch reports");
+
+                const reports = await response.json();
+                const tableBody = document.getElementById('complaint-table');
+                tableBody.innerHTML = ''; // Clear loading message
+
+                if(reports.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No reports found.</td></tr>';
+                    return;
+                }
+
+                reports.forEach(report => {
+                    // Logic to show "View Button" which triggers Modal
+                    // Changed from <a> tag to <button> tag with onclick event
+                    const photoHtml = report.imagePath 
+                        ? `<button class="btn-photo" onclick="openModal('${report.imagePath}')"><i class="fa-solid fa-image"></i> View</button>`
+                        : `<span class="no-photo">No Image</span>`;
+
+                    const dateStr = new Date(report.submittedAt).toLocaleDateString();
+                    
+                    // Status Badge Color Logic
+                    let badgeClass = 'badge-pending';
+                    if(report.status === 'In Progress') badgeClass = 'badge-progress';
+                    if(report.status === 'Resolved') badgeClass = 'badge-resolved';
+
+                    const row = `
+                        <tr>
+                            <td><strong>#${report._id.slice(-6)}</strong></td>
+                            <td>${report.problemType}</td>
+                            <td>${report.location}</td>
+                            <td>${photoHtml}</td>
+                            <td>${dateStr}</td>
+                            <td><span class="badge ${badgeClass}" id="status-${report._id}">${report.status}</span></td>
+                            <td>
+                                <button class="btn-update" onclick="alert('Status update feature coming soon!')">Update</button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('complaint-table').innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Error loading data. Is server running?</td></tr>';
+            }
+        };
+
+        // --- MODAL JS (Added) ---
+        function openModal(imageSrc) {
+            var modal = document.getElementById("imagePreviewModal");
+            var modalImg = document.getElementById("previewImg");
+            
+            modal.style.display = "flex"; // Shows the modal
+            modalImg.src = imageSrc;      // Sets the image source dynamically
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("imagePreviewModal");
+            modal.style.display = "none";
+        }
+
+        // Close modal if user clicks outside the image
+        window.onclick = function(event) {
+            var modal = document.getElementById("imagePreviewModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

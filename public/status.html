@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Status | CITYजन</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* ========================================================== */
+        /* SHARED THEME (Matches Index & Report Pages)                */
+        /* ========================================================== */
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #FAC9B8;
+            --white: #ffffff;
+            --light-grey: #f4f6f8;
+            --dark-text: #000000;
+            --footer-bg: #2F243A;
+            --header-height: 80px;
+            --success: #28a745;
+            --pending: #ffc107;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--light-grey); color: var(--dark-text); display: flex; flex-direction: column; min-height: 100vh; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        header { background: var(--white); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); position: sticky; top: 0; z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; height: var(--header-height); }
+        .logo-link { text-decoration: none; font-size: 1.8rem; font-weight: 800; color: var(--primary-color); }
+        .nav-links { list-style: none; display: flex; gap: 25px; }
+        .nav-links a { text-decoration: none; color: #000; font-weight: 700; }
+        .nav-utilities { display: flex; align-items: center; gap: 15px; }
+        .btn-primary { background: var(--primary-color); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; }
+
+        /* Main Content */
+        main { flex-grow: 1; padding: 40px 0; }
+
+        /* Status Card */
+        .status-card {
+            background: white; border-radius: 15px; padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08); max-width: 800px; margin: 0 auto;
+            display: none; /* Hidden by default, shown via JS */
+        }
+
+        /* Error Card */
+        .error-card {
+            background: white; border-radius: 15px; padding: 50px; text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08); max-width: 500px; margin: 0 auto;
+            display: none; /* Hidden by default */
+        }
+        .error-icon { font-size: 3rem; color: #dc3545; margin-bottom: 20px; }
+
+        /* Dashboard Elements */
+        .ticket-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 30px; }
+        .ticket-id { font-size: 1.5rem; font-weight: 800; color: var(--footer-bg); }
+        .status-badge { background: #e6f4ea; color: #1e7e34; padding: 8px 15px; border-radius: 50px; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; }
+
+        /* Progress Bar */
+        .progress-track { position: relative; display: flex; justify-content: space-between; margin: 40px 0; }
+        .progress-track::before { content: ''; position: absolute; top: 15px; left: 0; width: 100%; height: 4px; background: #eee; z-index: 0; }
+        .step { position: relative; z-index: 1; text-align: center; width: 25%; }
+        .step-circle { width: 35px; height: 35px; background: #ddd; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: bold; transition: 0.3s; }
+        .step.active .step-circle { background: var(--success); transform: scale(1.1); }
+        .step-label { font-size: 0.85rem; font-weight: 600; color: #777; }
+        .step.active .step-label { color: #000; }
+
+        /* Details Grid */
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f9f9f9; padding: 20px; border-radius: 10px; }
+        .detail-item h4 { font-size: 0.9rem; color: #666; margin-bottom: 5px; }
+        .detail-item p { font-weight: bold; font-size: 1.1rem; }
+
+        /* Footer */
+        footer { background: var(--footer-bg); color: white; padding: 40px 0; text-align: center; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo-link">CITYजन</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="report.html">Report a Problem</a></li>
+                <li><a href="track.html">Track My Complaint</a></li>
+            </ul>
+            <div class="nav-utilities">
+                <div style="font-weight:bold; color: var(--footer-bg);">
+                    <i class="fa-solid fa-phone"></i> 1800-999-999
+                </div>
+                <a href="index.html" class="btn-primary">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        
+        <div id="dashboard" class="status-card">
+            <div class="ticket-header">
+                <div>
+                    <span style="display:block; font-size:0.9rem; color:#666;">Ticket ID</span>
+                    <div class="ticket-id" id="display-id">Loading...</div>
+                </div>
+                <div class="status-badge"><i class="fa-solid fa-rotate"></i> In Progress</div>
+            </div>
+
+            <div class="progress-track">
+                <div class="step active">
+                    <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+                    <div class="step-label">Submitted</div>
+                </div>
+                <div class="step active">
+                    <div class="step-circle"><i class="fa-solid fa-user-gear"></i></div>
+                    <div class="step-label">Assigned</div>
+                </div>
+                <div class="step active">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">In Progress</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Resolved</div>
+                </div>
+            </div>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <h4>Department</h4>
+                    <p id="dept-name">Public Works (PWD)</p>
+                </div>
+                <div class="detail-item">
+                    <h4>Est. Resolution</h4>
+                    <p id="est-date">2 Days</p>
+                </div>
+                <div class="detail-item">
+                    <h4>Description</h4>
+                    <p>Reported issue regarding infrastructure maintenance in the sector.</p>
+                </div>
+                <div class="detail-item">
+                    <h4>Assigned Officer</h4>
+                    <p>Mr. R.K. Verma</p>
+                </div>
+            </div>
+
+            <div style="margin-top:30px; text-align:center;">
+                <button onclick="alert('Notification subscribed!')" class="btn-primary" style="background:#666; cursor:pointer;">
+                    <i class="fa-regular fa-bell"></i> Get SMS Updates
+                </button>
+            </div>
+        </div>
+
+        <div id="error-box" class="error-card">
+            <div class="error-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+            <h2>No Ticket ID Found</h2>
+            <p style="color:#666; margin: 15px 0;">We couldn't find a ticket ID in the URL link. Please go back and enter your ID manually.</p>
+            <a href="track.html" class="btn-primary" style="display:inline-block; padding: 12px 25px;">Go Back to Track</a>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 CITYजन | Building Better Cities</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Get URL Parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const ticketID = urlParams.get('id'); // Looks for ?id=...
+
+        const dashboard = document.getElementById('dashboard');
+        const errorBox = document.getElementById('error-box');
+
+        // 2. Check Logic
+        if (ticketID) {
+            // ID Exists -> Show Dashboard
+            dashboard.style.display = 'block';
+            errorBox.style.display = 'none';
+
+            // Populate Data
+            document.getElementById('display-id').innerText = ticketID;
+            
+            // (Optional) Randomize Department based on ID for "Fake Realism"
+            if(ticketID.includes("9")) {
+                document.getElementById('dept-name').innerText = "Electricity Dept";
+            } else if (ticketID.includes("5")) {
+                document.getElementById('dept-name').innerText = "Sanitation Dept";
+            }
+
+        } else {
+            // ID Missing -> Show Error
+            dashboard.style.display = 'none';
+            errorBox.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

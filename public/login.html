@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CITYजन | Report and Track Civic Issues</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <style>
+        /* --- Global Variables --- */
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #FAC9B8; /* Light reddish tint for gradient */
+            --white: #faf8f8;
+            --light-grey: #FAC9B8;
+            --dark-text: #000000;
+        }
+
+        /* --- Unique Landing Page Layout Styles --- */
+        body { margin: 0; font-family: sans-serif; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Navigation Styles */
+        header { background: var(--white); padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        .nav-links a { text-decoration: none; color: var(--dark-text); font-weight: 500; }
+        .nav-utilities { display: flex; align-items: center; gap: 15px; }
+        .nav-phone { display: flex; align-items: center; gap: 5px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold; }
+        .btn-primary { background-color: var(--primary-color); color: var(--white); }
+        .btn-secondary { background-color: transparent; border: 1px solid #ccc; }
+        .nav-toggle { display: none; background: none; border: none; font-size: 1.5rem; }
+
+        /* Hero Section */
+        .main-hero { padding: 80px 0; text-align: center; background: linear-gradient(180deg, var(--white) 0%, var(--secondary-color) 100%); }
+        .main-hero h1 { font-size: 2.8rem; color: var(--primary-color); margin-bottom: 1rem; font-weight: 700; }
+        .main-hero p { font-size: 1.15rem; color: var(--dark-text); max-width: 800px; margin: 0 auto 2rem auto; }
+        .hero-btn { font-size: 1.25rem; padding: 16px 36px; text-transform: uppercase; }
+
+        /* Quick Track Section */
+        .track-quick-section { padding: 40px 0; text-align: center; background: var(--white); }
+        .track-quick-section h2 { font-size: 1.8rem; color: var(--dark-text); margin-bottom: 1rem; }
+        .track-quick-form { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 0 auto; }
+        .track-quick-form input { padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 5px; }
+
+        /* Map Section */
+        .map-section { padding: 60px 0; text-align: center; background-color: var(--white); }
+        .map-container { height: 300px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 10px; margin-top: 20px;}
+
+        /* How It Works Section */
+        .how-it-works-section { padding: 60px 0; text-align: center; background-color: var(--light-grey); }
+        .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .step-card { padding: 2rem; border-radius: 12px; background: var(--white); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-align: left; }
+        .step-card i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem; }
+        .step-card h3 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 0.5rem; }
+        .step-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); }
+
+        /* --- UPDATED Footer Styles --- */
+        footer { 
+            padding: 40px 0; 
+            background-color: #2F243A; /* Your requested color */
+            color: #ffffff;            /* White text to be visible */
+            text-align: center; 
+            margin-top: 40px; 
+        }
+        
+        footer a { 
+            margin: 0 10px; 
+            color: #ffffff;            /* White links */
+            text-decoration: none; 
+        }
+
+        footer a:hover {
+            text-decoration: underline; /* Underline on hover for better UX */
+            opacity: 0.8;
+        }
+
+        /* Floating WhatsApp Button Styles */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #25D366; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+
+        .whatsapp-float img {
+            width: 32px;
+            height: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); 
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-hero h1 { font-size: 2rem; }
+            .process-steps { grid-template-columns: 1fr; }
+            .nav-links, .nav-phone, .btn-primary.login-btn { display: none; } 
+            .nav-toggle { display: block; }
+            
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                bottom: 15px;
+                right: 15px;
+            }
+            .whatsapp-float img {
+                width: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">CITYजन</a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="report.html">Report a Problem</a></li>
+                <li><a href="track.html">Track My Complaint</a></li>
+            </ul>
+
+            <div class="nav-utilities">
+                <button class="lang-toggle btn btn-secondary" style="padding: 6px 12px;">हिंदी</button>
+                <div class="nav-phone">
+                    <i class="fa-solid fa-phone" style="color: var(--primary-color);"></i>
+                    <strong>1800-999-999</strong>
+                </div>
+                <a href="login.html" class="btn btn-primary login-btn">Login</a>
+                <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="main-hero">
+            <div class="container">
+                <h1>Report an Issue in Your City</h1>
+                <p>See a pothole, broken street light, or overflowing bin? Let us know, and we'll get it fixed immediately.</p>
+                <a href="report.html" class="btn btn-primary hero-btn">Report Now</a>
+            </div>
+        </section>
+
+        <section class="track-quick-section">
+            <div class="container">
+                <h2>Track Your Report</h2>
+                <p>Already submitted a report? Enter your ticket ID to check its status.</p>
+                
+                <form class="track-quick-form" id="quick-track-form">
+                    <input type="text" id="quick-ticket-id" name="ticket-id" placeholder="Enter Ticket ID (e.g., CYJ12345)" required>
+                    <button type="submit" class="btn btn-primary">Track</button>
+                </form>
+            </div>
+        </section>
+        
+        <section class="map-section">
+            <div class="container">
+                <h2>Issues Near Me</h2>
+                <p>View live open and recently resolved complaints across the city. Transparency builds trust.</p>
+                <div class="map-container">
+                    <p>Map Placeholder (e.g., Simulated 20 pins for Potholes, Lights, and Garbage)</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works-section" id="howitworks">
+            <div class="container">
+                <h2>How It Works</h2>
+                <div class="process-steps">
+                    <div class="step-card"><i class="fa-solid fa-cloud-arrow-up"></i><h3>Submit Report</h3><p>Fill out the simple form with details and an optional photo.</p></div>
+                    <div class="step-card"><i class="fa-solid fa-magnifying-glass"></i><h3>Review & Assign</h3><p>Our team reviews the issue and assigns it to the relevant department.</p></div>
+                    <div class="step-card"><i class="fa-solid fa-screwdriver-wrench"></i><h3>Fix & Resolve</h3><p>The assigned team takes action to fix the issue on the ground swiftly.</p></div>
+                    <div class="step-card"><i class="fa-solid fa-circle-check"></i><h3>Verify & Close</h3><p>We verify the resolution and update the status to 'Completed'.</p></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CITYजन | All Rights Reserved</p>
+            <p><a href="#">Privacy Policy</a><a href="#">Terms</a><a href="#">Contact</a></p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/919580336977?text=Hi,%20I%20want%20to%20report%20an%20issue%20on%20CITYजन" 
+       class="whatsapp-float" 
+       target="_blank" 
+       title="Chat with us on WhatsApp">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1024px-WhatsApp.svg.png" alt="WhatsApp Logo">
+    </a>
+
+    <script>
+        // --- Quick Track Redirect Logic ---
+        document.getElementById('quick-track-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const ticketId = document.getElementById('quick-ticket-id').value.trim();
+            if (ticketId) {
+                window.location.href = `status.html?id=${encodeURIComponent(ticketId)}`;
+            } else {
+                alert("Please enter a Ticket ID.");
+            }
+        });
+    </script>
+</body>
+</html>

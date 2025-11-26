@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - City Issue Tracker</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <div class="admin-layout">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Panel</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="admin.html">Dashboard</a></li>
+                    <li><a href="#">All Reports</a></li>
+                    <li><a href="#">User Management</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="index.html">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="admin-header">
+                <h1>Welcome, Admin</h1>
+                <p>Here is the live status of all reports.</p>
+            </header>
+
+            <div class="dashboard-summary">
+                <div class="summary-card">
+                    <h3>New Reports</h3>
+                    <span class="count count-pending">12</span>
+                </div>
+                <div class="summary-card">
+                    <h3>In Progress</h3>
+                    <span class="count count-progress">8</span>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Resolved</h3>
+                    <span class="count count-resolved">122</span>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <div class="form-group">
+                    <label for="filter-status">Filter by Status</label>
+                    <select id="filter-status">
+                        <option value="all">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filter-type">Filter by Type</label>
+                    <select id="filter-type">
+                        <option value="all">All</option>
+                        <option value="pothole">Pothole</option>
+                        <option value="garbage">Garbage</option>
+                        <option value="streetlight">Streetlight</option>
+                        <option value="flooding">Flooding</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="reports-table-container">
+                <h3>All Submitted Reports</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Report ID</th>
+                            <th>Type</th>
+                            <th>Location</th>
+                            <th>Submitted By</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#73921</td>
+                            <td>Pothole</td>
+                            <td>Near City Park, Sector 5</td>
+                            <td>...xxx-1234</td>
+                            <td>2025-11-01</td>
+                            <td><span class="status status-pending">Pending</span></td>
+                            <td>
+                                <select class="action-select">
+                                    <option value="pending" selected>Set Status</option>
+                                    <option value="progress">In Progress</option>
+                                    <option value="resolved">Resolved</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#73920</td>
+                            <td>Garbage</td>
+                            <td>Opposite Main Market</td>
+                            <td>...xxx-5678</td>
+                            <td>2025-11-01</td>
+                            <td><span class="status status-progress">In Progress</span></td>
+                            <td>
+                                <select class="action-select">
+                                    <option value="progress" selected>In Progress</option>
+                                    <option value="resolved">Resolved</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#73919</td>
+                            <td>Streetlight</td>
+                            <td>Green Valley, St. 3</td>
+                            <td>...xxx-9012</td>
+                            <td>2025-10-31</td>
+                            <td><span class="status status-resolved">Resolved</span></td>
+                            <td>
+                                <select class="action-select" disabled>
+                                    <option value="resolved" selected>Resolved</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

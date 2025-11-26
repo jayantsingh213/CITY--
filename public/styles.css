@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Issue | CITYजन</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* ========================================================== */
+        /* 1. ORIGINAL THEME RESTORED (Professional White/Navy)       */
+        /* ========================================================== */
+
+        :root {
+            --primary-color: #000000;      /* Black Text/Buttons */
+            --secondary-color: #FAC9B8;    /* Peach Accent */
+            --white: #ffffff;
+            --light-grey: #f4f6f8;         /* Standard Light Grey (NOT Peach) */
+            --dark-text: #000000;
+            --footer-bg: #2F243A;          /* Deep Navy Footer */
+            --header-height: 80px;
+
+            /* --- Badge Colors --- */
+            --dept-elec: #ffc107;
+            --dept-sani: #28a745;
+            --dept-water: #17a2b8;
+            --dept-pwd: #6c757d;
+            --dept-police: #dc3545;
+            --dept-admin: #343a40;
+        }
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--light-grey); /* Clean Grey Background */
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* --- Header/Nav --- */
+        header { background: var(--white); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); position: sticky; top: 0; z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; height: var(--header-height); }
+        
+        .logo-link { text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo-text { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); letter-spacing: -1px; }
+
+        .nav-links { list-style: none; display: flex; align-items: center; gap: 25px; margin: 0; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: #000000; 
+            font-weight: 700; /* BOLD Links */
+            transition: color 0.2s; 
+            font-size: 1.05rem; 
+        }
+        .nav-links a:hover { color: var(--footer-bg); }
+        
+        .nav-utilities { display: flex; align-items: center; gap: 15px; }
+        .nav-phone { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--footer-bg); }
+        .btn-primary { 
+            background-color: var(--primary-color); color: var(--white); 
+            padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; border:none; cursor: pointer;
+        }
+        .btn-primary:hover { background-color: var(--footer-bg); }
+
+        /* --- Form Card Styles --- */
+        main { flex-grow: 1; padding: 40px 0; }
+        
+        .report-card {
+            max-width: 700px; margin: 0 auto; padding: 40px; 
+            background: var(--white); border-radius: 15px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        h2 { text-align: center; color: var(--primary-color); margin-bottom: 30px; font-size: 2rem; }
+        
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 0.95rem; }
+        input, textarea, select {
+            width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 1rem; box-sizing: border-box; transition: 0.3s; background: #fafafa;
+        }
+        input:focus, textarea:focus { border-color: var(--footer-bg); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(47, 36, 58, 0.1); }
+        
+        .btn-submit {
+            width: 100%; padding: 16px; background: var(--primary-color); color: white;
+            border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            margin-top: 10px; transition: transform 0.2s;
+        }
+        .btn-submit:hover { background: var(--footer-bg); transform: translateY(-2px); }
+
+        /* --- Footer --- */
+        footer { background: var(--footer-bg); color: #ffffff; padding: 40px 0; text-align: center; margin-top: auto; }
+        footer a { color: #ccc; text-decoration: none; margin: 0 10px; }
+        footer a:hover { color: var(--secondary-color); }
+
+        /* ========================================================== */
+        /* 2. AI INTEGRATION STYLES (The Magic)                       */
+        /* ========================================================== */
+        .ai-analysis-box {
+            background: #f0f2f5;
+            border-left: 5px solid var(--footer-bg);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 10px;
+            display: none; /* Hidden initially */
+            animation: slideIn 0.4s ease;
+        }
+        .ai-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .ai-label { font-size: 0.85rem; color: #555; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .dept-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 50px;
+            font-weight: 700; color: white; font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        /* Department Colors */
+        .dept-electricity { background-color: var(--dept-elec); color: #000; }
+        .dept-sanitation { background-color: var(--dept-sani); }
+        .dept-water { background-color: var(--dept-water); }
+        .dept-pwd { background-color: var(--dept-pwd); }
+        .dept-police { background-color: var(--dept-police); }
+        .dept-admin { background-color: var(--dept-admin); }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo-link">
+                <span class="logo-text">CITYजन</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="report.html">Report a Problem</a></li>
+                <li><a href="track.html">Track My Complaint</a></li>
+            </ul>
+
+            <div class="nav-utilities">
+                <div class="nav-phone">
+                    <i class="fa-solid fa-phone"></i> 1800-999-999
+                </div>
+                <a href="#" class="btn-primary">Login</a>
+                <button class="nav-toggle" style="display:none;">☰</button> </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="report-card">
+                <h2>Report a Civic Issue</h2>
+                <p style="text-align:center; margin-bottom: 20px; color: #666;">Fill in the details below. Our AI will automatically route it to the right department.</p>
+
+                <form id="reportForm" onsubmit="event.preventDefault(); submitReport();">
+                    
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-location-dot"></i> Exact Location</label>
+                        <input type="text" placeholder="e.g., Near Central Park Gate No. 2, Sector 4" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-pen"></i> Describe the Issue</label>
+                        <textarea id="complaintDesc" rows="5" placeholder="Type here... (e.g., 'The streetlight is broken and wires are sparking')" onkeyup="detectDepartment()" required></textarea>
+                        
+                        <div id="aiBox" class="ai-analysis-box">
+                            <div class="ai-header">
+                                <i class="fa-solid fa-robot fa-bounce" style="color: var(--footer-bg);"></i>
+                                <span class="ai-label">AI Auto-Detection</span>
+                            </div>
+                            <div style="display:flex; align-items:center; justify-content:space-between;">
+                                <span id="deptBadge" class="dept-badge dept-admin">Analyzing...</span>
+                                <span style="font-size: 0.8rem; color: #888;">Routed instantly</span>
+                            </div>
+                            <input type="hidden" id="finalDept" name="department" value="General Admin">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-camera"></i> Upload Photo Evidence</label>
+                        <input type="file" accept="image/*" style="padding: 10px;">
+                    </div>
+
+                    <button type="submit" class="btn-submit">Submit Report <i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <h3>CITYजन</h3>
+            <p>Empowering citizens to build better cities.</p>
+            <div style="margin-top: 10px;">
+                <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Support</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.7;">© 2025 CITYजन | All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        function detectDepartment() {
+            // 1. Get the text
+            const text = document.getElementById('complaintDesc').value.toLowerCase();
+            const aiBox = document.getElementById('aiBox');
+            const badge = document.getElementById('deptBadge');
+            const hiddenInput = document.getElementById('finalDept');
+
+            // 2. Show box only if user types enough
+            if (text.length > 4) {
+                aiBox.style.display = 'block';
+            } else {
+                aiBox.style.display = 'none';
+                return;
+            }
+
+            // 3. Keyword Logic
+            let deptName = "General Admin";
+            let deptClass = "dept-admin";
+            let icon = '<i class="fa-solid fa-building"></i>';
+
+            // Electricity
+            if (text.includes("light") || text.includes("wire") || text.includes("pole") || text.includes("current") || text.includes("spark") || text.includes("dark")) {
+                deptName = "Electricity Dept";
+                deptClass = "dept-electricity";
+                icon = '<i class="fa-solid fa-bolt"></i>';
+            }
+            // Sanitation
+            else if (text.includes("garbage") || text.includes("trash") || text.includes("smell") || text.includes("dirty") || text.includes("dustbin") || text.includes("waste")) {
+                deptName = "Sanitation Dept";
+                deptClass = "dept-sanitation";
+                icon = '<i class="fa-solid fa-trash-can"></i>';
+            }
+            // Water
+            else if (text.includes("water") || text.includes("leak") || text.includes("pipe") || text.includes("sewage") || text.includes("drain") || text.includes("supply")) {
+                deptName = "Water Supply";
+                deptClass = "dept-water";
+                icon = '<i class="fa-solid fa-faucet-drip"></i>';
+            }
+            // Roads (PWD)
+            else if (text.includes("road") || text.includes("pothole") || text.includes("street") || text.includes("broken") || text.includes("asphalt")) {
+                deptName = "Public Works (PWD)";
+                deptClass = "dept-pwd";
+                icon = '<i class="fa-solid fa-road"></i>';
+            }
+            // Police
+            else if (text.includes("accident") || text.includes("fight") || text.includes("crime") || text.includes("stolen") || text.includes("traffic")) {
+                deptName = "Traffic/Police";
+                deptClass = "dept-police";
+                icon = '<i class="fa-solid fa-shield-halved"></i>';
+            }
+
+            // 4. Update UI
+            badge.className = `dept-badge ${deptClass}`;
+            badge.innerHTML = `${icon} ${deptName}`;
+            hiddenInput.value = deptName;
+        }
+
+        function submitReport() {
+            const dept = document.getElementById('finalDept').value;
+            const ticketID = "CYJ" + Math.floor(1000 + Math.random() * 9000);
+            
+            alert(`✅ REPORT SUBMITTED!\n\nTicket ID: ${ticketID}\nRouted To: ${dept}\n\nCheck 'Track My Complaint' for updates.`);
+            
+            // Optional: Redirect to home
+             window.location.href = 'index.html';
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Issue | CITYजन</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        /* ========================================================== */
+        /* 1. ORIGINAL THEME RESTORED (Professional White/Navy)       */
+        /* ========================================================== */
+
+        :root {
+            --primary-color: #000000;      /* Black Text/Buttons */
+            --secondary-color: #FAC9B8;    /* Peach Accent */
+            --white: #ffffff;
+            --light-grey: #f4f6f8;         /* Standard Light Grey */
+            --dark-text: #000000;
+            --footer-bg: #2F243A;          /* Deep Navy Footer */
+            --header-height: 80px;
+        }
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--light-grey);
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* --- Header/Nav --- */
+        header { background: var(--white); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); position: sticky; top: 0; z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; height: var(--header-height); }
+        
+        .logo-link { text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo-text { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); letter-spacing: -1px; }
+
+        .nav-links { list-style: none; display: flex; align-items: center; gap: 25px; margin: 0; }
+        .nav-links a { 
+            text-decoration: none; color: #000000; font-weight: 700; transition: color 0.2s; font-size: 1.05rem; 
+        }
+        .nav-links a:hover { color: var(--footer-bg); }
+        
+        .nav-utilities { display: flex; align-items: center; gap: 15px; }
+        .nav-phone { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--footer-bg); }
+        .btn-primary { 
+            background-color: var(--primary-color); color: var(--white); 
+            padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; border:none; cursor: pointer;
+        }
+        .btn-primary:hover { background-color: var(--footer-bg); }
+
+        /* --- Form Card Styles --- */
+        main { flex-grow: 1; padding: 40px 0; }
+        
+        .report-card {
+            max-width: 700px; margin: 0 auto; padding: 40px; 
+            background: var(--white); border-radius: 15px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        h2 { text-align: center; color: var(--primary-color); margin-bottom: 10px; font-size: 2rem; }
+        .sub-header { text-align: center; color: #666; margin-bottom: 30px; }
+        
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 0.95rem; }
+        
+        input, textarea, select {
+            width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 1rem; box-sizing: border-box; transition: 0.3s; background: #fafafa;
+        }
+        input:focus, textarea:focus, select:focus { 
+            border-color: var(--footer-bg); outline: none; background: #fff; 
+            box-shadow: 0 0 0 4px rgba(47, 36, 58, 0.1); 
+        }
+        
+        /* --- MAP STYLING (New) --- */
+        #map { 
+            height: 300px; width: 100%; border-radius: 8px; margin-top: 10px; 
+            border: 2px solid #eee; z-index: 1;
+        }
+        .location-hint { font-size: 0.85rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+
+        .btn-submit {
+            width: 100%; padding: 16px; background: var(--primary-color); color: white;
+            border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            margin-top: 10px; transition: transform 0.2s;
+        }
+        .btn-submit:hover { background: var(--footer-bg); transform: translateY(-2px); }
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+        /* --- Footer --- */
+        footer { background: var(--footer-bg); color: #ffffff; padding: 40px 0; text-align: center; margin-top: auto; }
+        footer a { color: #ccc; text-decoration: none; margin: 0 10px; }
+        footer a:hover { color: var(--secondary-color); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .report-card { padding: 20px; margin: 0 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo-link">
+                <span class="logo-text">CITYजन</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="report.html">Report a Problem</a></li>
+                <li><a href="track.html">Track My Complaint</a></li>
+            </ul>
+
+            <div class="nav-utilities">
+                <div class="nav-phone">
+                    <i class="fa-solid fa-phone"></i> 1800-999-999
+                </div>
+                <a href="#" class="btn-primary">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="report-card">
+                <h2>Report a Civic Issue</h2>
+                <p class="sub-header">Pin the exact location and upload a photo.</p>
+
+                <form id="report-form">
+                    
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-list"></i> Type of Problem</label>
+                        <select id="problem-type" required>
+                            <option value="">-- Select an issue --</option>
+                            <option value="Pothole">Pothole / Road Damage</option>
+                            <option value="Garbage">Garbage Dump / Sanitation</option>
+                            <option value="Street Light">Broken Street Light</option>
+                            <option value="Water">Water Leakage / Sewage</option>
+                            <option value="Traffic">Traffic / Illegal Parking</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-map-location-dot"></i> Location</label>
+                        <input type="text" id="location" placeholder="Click on map to auto-fill location..." required readonly style="background-color: #e9ecef; cursor: not-allowed;">
+                        
+                        <p class="location-hint"><i class="fa-solid fa-hand-pointer"></i> Tap on the map below to pin the spot.</p>
+                        <div id="map"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-camera"></i> Upload Photo (Optional)</label>
+                        <input type="file" id="photo-upload" accept="image/*" style="padding: 10px; background: white;">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-pen"></i> Description</label>
+                        <textarea id="description" rows="4" placeholder="Add details (e.g. 'Near the big banyan tree, causing traffic jam')"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Submit Report <i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <h3>CITYजन</h3>
+            <p>Empowering citizens to build better cities.</p>
+            <div style="margin-top: 10px;">
+                <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Support</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.7;">© 2025 CITYजन | All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // --- 1. Initialize Map (Leaflet) ---
+        var map = L.map('map').setView([26.8467, 80.9462], 13); 
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var marker;
+
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+
+            if (marker) map.removeLayer(marker);
+            marker = L.marker([lat, lng]).addTo(map);
+
+            // Fill the hidden input with coordinates
+            document.getElementById('location').value = `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`;
+        });
+
+        // --- 2. Form Submission Logic (REAL BACKEND CONNECTION) ---
+        document.getElementById('report-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const btn = document.querySelector('.btn-submit');
+            const originalText = btn.innerHTML;
+            
+            // Show loading state
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+            btn.disabled = true;
+
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('problemType', document.getElementById('problem-type').value);
+            formData.append('location', document.getElementById('location').value);
+            formData.append('description', document.getElementById('description').value);
+
+            const fileInput = document.getElementById('photo-upload');
+            if (fileInput.files[0]) {
+                formData.append('photo', fileInput.files[0]);
+            }
+
+            try {
+                // SEND DATA TO YOUR SERVER
+                const response = await fetch('/api/submit-report', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(`✅ REPORT SUBMITTED SUCCESSFULLY!\n\nTicket ID: ${result.reportId}`);
+                    window.location.href = "index.html";
+                } else {
+                    throw new Error(result.error || "Submission failed");
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert("❌ Error: " + err.message);
+            } finally {
+                // Reset button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+</html>

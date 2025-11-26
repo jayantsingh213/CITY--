@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track My Complaint - CITYजन</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* --- Global Variables --- */
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #FAC9B8;
+            --white: #faf8f8;
+            --light-grey: #FAC9B8;
+            --dark-text: #000000;
+            --footer-bg: #2F243A; /* Your Dark Theme Color */
+        }
+
+        /* --- Layout Styles --- */
+        body { margin: 0; font-family: sans-serif; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- Navigation --- */
+        header { background: var(--white); padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: relative; z-index: 500; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
+        
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        
+        /* --- UPDATED: BOLD & DARK NAV LINKS --- */
+        .nav-links a { 
+            text-decoration: none; 
+            color: #000000;    /* Pure Black */
+            font-weight: 700;  /* Bold */
+            font-size: 1.05rem; 
+        }
+
+        .nav-utilities { display: flex; align-items: center; gap: 15px; }
+        .nav-phone { display: flex; align-items: center; gap: 5px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold; }
+        .btn-primary { background-color: var(--primary-color); color: var(--white); }
+        .btn-secondary { background-color: transparent; border: 1px solid #ccc; }
+        .nav-toggle { display: none; background: none; border: none; font-size: 1.5rem; }
+
+        /* --- Unique Track Page Layout Styles --- */
+        main {
+            flex-grow: 1; 
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            padding: 60px 0;
+            background-color: #f9f9f9; /* Light background for contrast */
+            min-height: 80vh;
+        }
+
+        .track-form-card {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: box-shadow 0.3s;
+        }
+
+        .track-form-card h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .track-form-card .form-intro {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: var(--dark-text);
+        }
+
+        /* Input Styling */
+        input[type="text"] { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            font-size: 1rem; 
+            box-sizing: border-box; 
+        }
+
+        /* Button Styling */
+        .btn-large { width: 100%; padding: 15px; font-size: 1.2rem; margin-top: 10px; }
+
+        /* Footer (Matches other pages) */
+        footer { padding: 40px 0; background-color: var(--footer-bg); color: #ffffff; text-align: center; margin-top: 0; }
+        footer a { margin: 0 10px; color: #ffffff; text-decoration: none; }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links, .nav-phone, .login-btn-nav { display: none; } 
+            .nav-toggle { display: block; }
+            .track-form-card { padding: 20px; margin: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">CITYजन</a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="report.html">Report a Problem</a></li>
+                <li><a href="track.html">Track My Complaint</a></li>
+            </ul>
+
+            <div class="nav-utilities">
+                <div class="nav-phone">
+                    <i class="fa-solid fa-phone" style="color: var(--primary-color);"></i>
+                    <strong>1800-999-999</strong>
+                </div>
+                <a href="index.html" class="btn btn-primary" onclick="alert('Go to Home to Login')">Login</a>
+                <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="track-form-card">
+            <h2>Track Your Complaint</h2>
+            <p class="form-intro">Enter the Ticket ID you received upon submission.</p>
+            
+            <form id="track-form">
+                <div class="form-group">
+                    <label for="ticket-id">Ticket ID</label>
+                    <input type="text" id="ticket-id" name="ticket-id" placeholder="e.g., CYJ12345" required>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-large">Track Status</button>
+                </div>
+            </form>
+
+            <div id="status-result">
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CITYजन | All Rights Reserved</p>
+            <p>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // === JavaScript Logic (Minimal) ===
+        const trackForm = document.getElementById('track-form');
+
+        trackForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const ticketId = document.getElementById('ticket-id').value.trim();
+            
+            if (ticketId) {
+                // Simulation: Just redirect to status page with ID
+                window.location.href = `status.html?id=${encodeURIComponent(ticketId)}`;
+            } else {
+                alert("Please enter a Ticket ID.");
+            }
+        });
+    </script>
+</body>
+</html>
