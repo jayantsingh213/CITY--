@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* --- THEME COLORS --- */
         :root {
             --primary-color: #000000;
             --secondary-color: #FAC9B8;
@@ -28,7 +27,6 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        /* --- Header --- */
         header { 
             background: var(--white); 
             padding: 15px 0; 
@@ -77,7 +75,6 @@
         }
         .btn-logout:hover { color: red; }
 
-        /* --- Dashboard Stats --- */
         .dashboard-title { margin: 30px 0 20px; display: flex; justify-content: space-between; align-items: center; }
         .dashboard-title h2 { color: var(--footer-bg); margin: 0; }
         .date-display { color: #666; font-size: 0.9rem; }
@@ -97,7 +94,6 @@
         .stat-info h3 { margin: 0; font-size: 1.8rem; }
         .stat-info p { margin: 0; color: #666; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- Management Table --- */
         .table-container {
             background: var(--white);
             border-radius: 10px;
@@ -112,13 +108,11 @@
         td { padding: 15px; border-bottom: 1px solid #eee; color: #444; vertical-align: middle; }
         tr:hover { background-color: #f9f9f9; }
 
-        /* Status Badges */
         .badge { padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; display: inline-block; }
         .badge-pending { background: #fff3cd; color: #856404; }
         .badge-progress { background: #e2e6ea; color: #333; }
         .badge-resolved { background: #d4edda; color: #155724; }
 
-        /* Buttons */
         .btn-update {
             background: var(--primary-color); color: white; border: none; padding: 6px 12px;
             border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: 0.3s;
@@ -128,18 +122,16 @@
         .btn-photo { 
             background: var(--blue); color: white; text-decoration: none; 
             padding: 6px 12px; border-radius: 4px; font-size: 0.85rem; display: inline-block;
-            border: none; /* Added for button compatibility */
-            cursor: pointer; /* Added for button compatibility */
+            border: none; 
+            cursor: pointer; 
         }
         .btn-photo:hover { opacity: 0.9; }
         .no-photo { color: #999; font-style: italic; font-size: 0.85rem; }
 
-        /* Footer */
         footer { margin-top: 50px; padding: 20px 0; background: var(--footer-bg); color: white; text-align: center; font-size: 0.9rem; }
 
-        /* --- MODAL CSS (Added) --- */
         .modal {
-            display: none; /* Hidden by default */
+            display: none; 
             position: fixed; 
             z-index: 1000; 
             padding-top: 50px; 
@@ -148,7 +140,7 @@
             width: 100%; 
             height: 100%; 
             overflow: auto; 
-            background-color: rgba(0,0,0,0.85); /* Black w/ opacity */
+            background-color: rgba(0,0,0,0.85); 
             align-items: center;
             justify-content: center;
         }
@@ -158,7 +150,7 @@
             display: block;
             width: 80%;
             max-width: 700px;
-            max-height: 80vh; /* Keeps it within viewport */
+            max-height: 80vh; 
             object-fit: contain;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(255,255,255,0.1);
@@ -276,17 +268,19 @@
     </footer>
 
     <script>
-        // --- LOAD REAL DATA FROM MONGODB ---
         window.onload = async function() {
             try {
-                // 1. Fetch reports from the Server
                 const response = await fetch('/api/reports'); 
                 
-                if(!response.ok) throw new Error("Failed to fetch reports");
+                const contentType = response.headers.get("content-type");
+                
+                if(!response.ok || !contentType || !contentType.includes("application/json")) {
+                    throw new Error("API_MISSING");
+                }
 
                 const reports = await response.json();
                 const tableBody = document.getElementById('complaint-table');
-                tableBody.innerHTML = ''; // Clear loading message
+                tableBody.innerHTML = ''; 
 
                 if(reports.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No reports found.</td></tr>';
@@ -294,15 +288,12 @@
                 }
 
                 reports.forEach(report => {
-                    // Logic to show "View Button" which triggers Modal
-                    // Changed from <a> tag to <button> tag with onclick event
                     const photoHtml = report.imagePath 
                         ? `<button class="btn-photo" onclick="openModal('${report.imagePath}')"><i class="fa-solid fa-image"></i> View</button>`
                         : `<span class="no-photo">No Image</span>`;
 
                     const dateStr = new Date(report.submittedAt).toLocaleDateString();
                     
-                    // Status Badge Color Logic
                     let badgeClass = 'badge-pending';
                     if(report.status === 'In Progress') badgeClass = 'badge-progress';
                     if(report.status === 'Resolved') badgeClass = 'badge-resolved';
@@ -324,18 +315,41 @@
                 });
 
             } catch (err) {
-                console.error(err);
-                document.getElementById('complaint-table').innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Error loading data. Is server running?</td></tr>';
+                console.warn("API Not Found. Switching to Demo Mode.");
+                const tableBody = document.getElementById('complaint-table');
+                tableBody.innerHTML = ''; 
+
+                const demoData = [
+                    { id: 'DEMO-8821', type: 'Pothole', loc: 'Sector 14, Main Road', date: '2025-11-20', status: 'Pending', badge: 'badge-pending' },
+                    { id: 'DEMO-8822', type: 'Garbage', loc: 'Near City Hospital', date: '2025-11-19', status: 'In Progress', badge: 'badge-progress' },
+                    { id: 'DEMO-8823', type: 'Street Light', loc: 'Block C, Park Avenue', date: '2025-11-18', status: 'Resolved', badge: 'badge-resolved' }
+                ];
+
+                demoData.forEach(row => {
+                     const html = `
+                        <tr>
+                            <td><strong>#${row.id}</strong></td>
+                            <td>${row.type}</td>
+                            <td>${row.loc}</td>
+                            <td><span class="no-photo">No Image</span></td>
+                            <td>${row.date}</td>
+                            <td><span class="badge ${row.badge}">${row.status}</span></td>
+                            <td><button class="btn-update" onclick="alert('This is a demo button.')">Update</button></td>
+                        </tr>
+                     `;
+                     tableBody.innerHTML += html;
+                });
+                
+                tableBody.innerHTML += '<tr><td colspan="7" style="text-align:center; font-size:0.8rem; color:#888; padding-top:20px;">⚠️ Backend not connected. Showing Demo Data.</td></tr>';
             }
         };
 
-        // --- MODAL JS (Added) ---
         function openModal(imageSrc) {
             var modal = document.getElementById("imagePreviewModal");
             var modalImg = document.getElementById("previewImg");
             
-            modal.style.display = "flex"; // Shows the modal
-            modalImg.src = imageSrc;      // Sets the image source dynamically
+            modal.style.display = "flex"; 
+            modalImg.src = imageSrc;      
         }
 
         function closeModal() {
@@ -343,7 +357,6 @@
             modal.style.display = "none";
         }
 
-        // Close modal if user clicks outside the image
         window.onclick = function(event) {
             var modal = document.getElementById("imagePreviewModal");
             if (event.target == modal) {
